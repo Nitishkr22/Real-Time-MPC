@@ -1,0 +1,8 @@
+prefix=/home/nitish/Documents/Real-time-MPC/install
+
+Name: genesis_path_follower
+Description: Description of genesis_path_follower
+Version: 0.0.1
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime std_msgs
