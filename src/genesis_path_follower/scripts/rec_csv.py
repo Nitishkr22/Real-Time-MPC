@@ -18,7 +18,7 @@ psi = long_accel = lat_accel = yaw_rate = 0.0
 df = 0
 
 # Initialize CSV file
-csv_file = "/home/nitish/Documents/catkin_ws_mpc/src/genesis_path_follower/waypoints/solio2.csv"
+csv_file = "/home/nitish/Documents/Real-time-MPC/src/genesis_path_follower/waypoints/solio_scurve.csv"
 headers = ["a", "psi", "df", "lon", "lat", "mode", "v", "y", "x", "t"]
 
 with open(csv_file, mode='w', newline='') as file:

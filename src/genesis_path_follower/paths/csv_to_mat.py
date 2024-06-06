@@ -3,7 +3,7 @@ import numpy as np
 from scipy.io import savemat
 
 # Load the CSV file into a DataFrame
-df = pd.read_csv("/home/nitish/Documents/catkin_ws_mpc/src/genesis_path_follower/paths/solio2.csv")
+df = pd.read_csv("/home/nitish/Documents/Real-time-MPC/src/genesis_path_follower/paths/solio_scurve.csv")
 
 # Extract the first entry of "mode" and convert it to a shape of (1,)
 mode_first_entry = np.array([df["mode"].values[0]])
@@ -24,5 +24,5 @@ variables = {
 }
 
 # Save the dictionary of arrays to a .mat file
-savemat("solio2.mat", variables)
+savemat("solio_scurve.mat", variables)
 print("MAT file saved successfully.")

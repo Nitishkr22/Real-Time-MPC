@@ -17,7 +17,7 @@ import yaml
 
 
 # Type in name for CSV, MAT and YAML files #####################################################
-name = "bolo"
+name = "solio_new"
 ################################################################################################
 
 lat = lon = x = y = 0.0
@@ -25,7 +25,7 @@ v = v_long = v_lat = 0.0
 psi = long_accel = lat_accel = yaw_rate = 0.0
 df = 0
 
-folder = "/home/abysmal/catkin_ws_mpc/src/genesis_path_follower/waypoints"
+folder = "/home/nitish/Documents/Real-time-MPC/src/genesis_path_follower/waypoints"
 csv_file = folder + "/" + name + ".csv"
 headers = ["a", "psi", "df", "lon", "lat", "mode", "v", "y", "x", "t"]
 
@@ -157,7 +157,7 @@ variables = {
     "t": np.array([df["t"].values])
 }
 
-mat_path = "/home/abysmal/catkin_ws_mpc/src/genesis_path_follower/paths/" + name + ".mat"
+mat_path = "/home/nitish/Documents/Real-time-MPC/src/genesis_path_follower/paths/" + name + ".mat"
 savemat(mat_path, variables)
 print("MAT file saved successfully.")
 
@@ -182,7 +182,7 @@ yaml_data = {
     "V0": 0.0
 }
 
-yaml_file = "/home/abysmal/catkin_ws_mpc/src/genesis_path_follower/launch/" + name + ".yaml"
+yaml_file = "/home/nitish/Documents/Real-time-MPC/src/genesis_path_follower/launch/" + name + ".yaml"
 
 with open(yaml_file, 'w') as file:
     yaml.dump(yaml_data, file)

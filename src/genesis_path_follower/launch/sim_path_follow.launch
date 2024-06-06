@@ -5,7 +5,7 @@
 	
 	<!-- Pick between CPG + RFS coordinate systems here. -->
 	<!--rosparam command="load" file="$(find genesis_path_follower)/launch/rfs.yaml" ns="vehicle"/-->
-	<rosparam command="load" file="$(find genesis_path_follower)/launch/solio2.yaml" ns="vehicle"/>
+	<rosparam command="load" file="$(find genesis_path_follower)/launch/solio_new.yaml" ns="vehicle"/>
 
   <param name="vehicle/scripts_dir" type="str" value="$(find genesis_path_follower)/scripts/" />
   
@@ -16,7 +16,7 @@
   <param name="vehicle/target_vel" type="double" value="10.0" />
 
   <!-- Waypoints CSV to specify path. -->
-  <param name="vehicle/mat_waypoints" type="str" value="$(find genesis_path_follower)/paths/solio2.mat" />
+  <param name="vehicle/mat_waypoints" type="str" value="$(find genesis_path_follower)/paths/solio_new.mat" />
 
   <!-- Controller Selection -->
   <param name="vehicle/controller" type="str" value="kinematic_mpc"/>

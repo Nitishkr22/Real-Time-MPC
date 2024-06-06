@@ -14,6 +14,8 @@ import math
 from std_msgs.msg import Int32
 from std_msgs.msg import Float32 as Float32Msg
 from genesis_path_follower.msg import mpc_path
+# from genesis_path_follower.scripts import pid_controller2
+import pid_controller2
 
 # Define the MABX(vehicle control controller) IP address and port for sending data
 mabx_IP = "192.168.50.1"
@@ -237,11 +239,11 @@ if __name__ == "__main__":
     counter = 0
     rate = rospy.Rate(15)
 
-    kp = 0.00008
-    ki = 0.0006
-    kd = 0.28
+    kp = 0.08
+    ki = 0.006
+    kd = 0.38
 
-    pid_controller = controller2.PIDControllervel(kp, ki, kd)
+    pid_controller = pid_controller2.PIDControllervel(kp, ki, kd)
 
     while not rospy.is_shutdown():
         try:
@@ -257,10 +259,13 @@ if __name__ == "__main__":
 
             if(vel_gnss>set_vel):
                     # obj.send_data("A1,D,2,0,0,0,0,0,0,0,0\r\n")
-                throttle = 2.0    
+                throttle = 5.0  
+            elif set_vel<1.0:
+                throttle = 0.0
             else:
                 throttle = throttle_input1
-
+            if abs(steer_change) > 120:
+                throttle = int(throttle*0.7)
             #################################################################
 
 
@@ -273,8 +278,10 @@ if __name__ == "__main__":
             # const_speed = 27
             print("mpc steering output: ",steer_output)
             print("set_velocity: ",set_vel)
-            print("velocity feedback: ",vel_feed)
+            print("velocity feedback: ",vel_gnss)
+            print("throttle: ",throttle)
             print("steer change: ",steer_change)
+            const_speed = throttle
             ################################### Try below 2 options for speed control ##############
 
             # counter = (counter + 1) % 256
@@ -284,14 +291,14 @@ if __name__ == "__main__":
             #     const_speed = max_speed
 
             ################################# OR ####################
-            if set_vel > 17.0:
-                const_speed = 15
-            elif set_vel<17 and set_vel>12:  
-                const_speed = int(set_vel-3)
-            else:
-                const_speed = int(set_vel)
-            if abs(steer_change) > 100:
-                const_speed = int(set_vel*0.4)
+            # if set_vel > 17.0:
+            #     const_speed = 15
+            # elif set_vel<17 and set_vel>12:  
+            #     const_speed = int(set_vel-3)
+            # else:
+            #     const_speed = int(set_vel)
+            # if abs(steer_change) > 100:
+            #     const_speed = int(set_vel*0.4)
             
             # if steer_change > abs(70):
             #     const_speed = int(set_vel*0.5)
