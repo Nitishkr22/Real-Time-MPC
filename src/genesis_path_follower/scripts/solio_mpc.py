@@ -39,6 +39,7 @@ cntr = 0
 steermpc = 0.0
 velocity_ump = 0.0
 steer_ump = 0.0
+velg = 0.0
 # Initialize the ROS node for the algorithm
 # rospy.init_node("GNSS_navigation", anonymous=True)
 
@@ -218,6 +219,10 @@ def feedback_mabx():
     sock.close()
     return steer_ang, vel_feed
 
+def callback_vel(data):
+    global velg
+    velg=data.hor_speed  
+
 max_speed = 15
 const_speed = 15
 if __name__ == "__main__":
@@ -228,15 +233,35 @@ if __name__ == "__main__":
 
     rospy.Subscriber("/control/steer_angle", Float32Msg, steering_mpc, queue_size=1)
     rospy.Subscriber('/vehicle/mpc_path', mpc_path, update_mpc_trajectory, queue_size=1)
+    rospy.Subscriber("/novatel/oem7/bestvel",BESTVEL, callback_vel)
     counter = 0
     rate = rospy.Rate(15)
+
+    kp = 0.00008
+    ki = 0.0006
+    kd = 0.28
+
+    pid_controller = controller2.PIDControllervel(kp, ki, kd)
+
     while not rospy.is_shutdown():
         try:
             set_vel = velocity_ump[-1] if isinstance(velocity_ump, (list, tuple)) else velocity_ump
             steer_change = steer_ump[0] if isinstance(steer_ump, (list, tuple)) else steer_ump
             steer_change = math.degrees(steer_change)*15
             set_vel = set_vel*3.6
+            ############### PID control for velocity ################### 
+            vel_gnss = velg*3.6
+            control_signal = pid_controller.compute(set_vel, vel_gnss)  # (desired_vel, feedback)
 
+            throttle_input1 = np.clip(control_signal, 0, 20)
+
+            if(vel_gnss>set_vel):
+                    # obj.send_data("A1,D,2,0,0,0,0,0,0,0,0\r\n")
+                throttle = 2.0    
+            else:
+                throttle = throttle_input1
+
+            #################################################################
 
 
             steering_angle, vel_feed = feedback_mabx()
